@@ -4,8 +4,9 @@
 
 import { Router, Request, Response } from 'express'
 
-import { createBody } from '../../interface/createURL.js'
-import { createPublic } from '../../helper/createURL.js'
+import validateURL from '../../middlewares/public/validateURL.js'
+import createPublicURL from '../../middlewares/public/createPublicURL.js'
+import getStats from '../../middlewares/public/getStats.js'
 
 const publicAPI: Router = Router()
 
@@ -25,10 +26,12 @@ publicAPI
       header: '',
     })
   })
-  .post(async (req: Request, res: Response) => {
-    const body: createBody = { ...req.body }
-    const result = createPublic(body)
-    res.status(result.status).json(result.res)
-  })
+  .post(validateURL, createPublicURL)
+
+/**
+ * Public API route to get stats for a short URL
+ * <server>/api/stats?slug=<short url>
+ */
+publicAPI.route('/stats').get(getStats)
 
 export default publicAPI
