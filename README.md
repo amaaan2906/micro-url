@@ -1,5 +1,12 @@
 # URL Shortener
 
-Create and share short url's
+Microservice to create short urls
 
 ---
+
+## Tech Stack
+
+- Express
+- Typescript
+- MongoDB
+- Vue
