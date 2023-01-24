@@ -34,6 +34,9 @@ routes.use('/api/', publicAPI)
 
 // pro user private api
 import privateAPI from './private/index.js'
+console.log(
+  `[server] Private route registered on '${process.env.PRIVATE_ROUTE}'`
+)
 routes.use(`/${process.env.PRIVATE_ROUTE}/`, privateAPI)
 
 // error handling
