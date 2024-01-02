@@ -39,6 +39,14 @@ const urlSchema: Schema = new Schema<URL>({
     required: true,
     default: 'public',
   },
+  /*
+  visibility: {
+    // future update
+    type: String,
+    required: true,
+    default: 'public',
+  }
+  */
 })
 
 export const urlModel = model<URL>('url', urlSchema)
