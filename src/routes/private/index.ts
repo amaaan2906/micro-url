@@ -4,8 +4,8 @@
 
 import { Router } from 'express'
 
-import validateBody from '../../middlewares/private/validateBody.js'
-import createPrivateURL from '../../middlewares/private/createPrivateURL.js'
+import { privateValidate } from '../../middlewares/validateCreate.js'
+import { privateCreate } from '../../middlewares/createURL.js'
 
 const privateAPI: Router = Router()
 
@@ -13,7 +13,7 @@ const privateAPI: Router = Router()
  * Private API route to create a new short URL
  * <server>/<private_route>/create
  */
-privateAPI.route('/create').post(validateBody, createPrivateURL)
+privateAPI.route('/create').post(privateValidate, privateCreate)
 
 /**
  * Private API route to get list of users slugs

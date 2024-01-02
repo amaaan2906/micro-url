@@ -4,9 +4,9 @@
 
 import { Router, Request, Response } from 'express'
 
-import validateURL from '../../middlewares/public/validateURL.js'
-import createPublicURL from '../../middlewares/public/createPublicURL.js'
-import getStats from '../../middlewares/public/getStats.js'
+import { publicValidate } from '../../middlewares/validateCreate.js'
+import { publicCreate } from '../../middlewares/createURL.js'
+import { publicStats } from '../../middlewares/getStats.js'
 
 const publicAPI: Router = Router()
 
@@ -26,12 +26,12 @@ publicAPI
       header: '',
     })
   })
-  .post(validateURL, createPublicURL)
+  .post(publicValidate, publicCreate)
 
 /**
  * Public API route to get stats for a short URL
  * <server>/api/stats?slug=<short url>
  */
-publicAPI.route('/stats').get(getStats)
+publicAPI.route('/stats').get(publicStats)
 
 export default publicAPI

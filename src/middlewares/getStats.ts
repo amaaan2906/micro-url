@@ -1,6 +1,7 @@
 /**
- * Get URL stats middleware for public endpoint
+ * Get stats middleware
  */
+
 import { Request, Response, NextFunction } from 'express'
 
 if (process.env.NODE_ENV !== 'production') {
@@ -9,10 +10,14 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const DATABASE = process.env.DATABASE_TYPE
-const DB_CONTROLLER = `../../controller/url.${DATABASE}.js`
+const DB_CONTROLLER = `../controller/url.${DATABASE}.js`
 const { getStats } = await import(DB_CONTROLLER)
 
-export default async (req: Request, res: Response, next: NextFunction) => {
+export async function publicStats(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     res.json(
       await getStats('public', {

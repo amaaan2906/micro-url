@@ -16,7 +16,13 @@ interface createResponse {
     __v: number
   }
 }
-interface statsResponse {}
+interface statsResponse {
+  url: string
+  slug: string
+  clicks: number
+  createdDate: number
+}
+
 interface createOptions {
   url: string
   slug: string
@@ -28,7 +34,7 @@ interface statsOptions {
 export async function getStats(
   type: string = 'public',
   options: statsOptions
-): Promise<any> {
+): Promise<statsResponse> {
   let { slug } = options
   let response: any = {}
   if (typeof slug === 'undefined' || slug == '')
