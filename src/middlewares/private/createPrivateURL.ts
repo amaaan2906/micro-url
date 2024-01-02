@@ -16,7 +16,7 @@ const { createURL } = await import(DB_CONTROLLER)
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json(
-      createURL('private', {
+      await createURL('private', {
         url: req.body.url,
         slug: req.body.slug,
       })

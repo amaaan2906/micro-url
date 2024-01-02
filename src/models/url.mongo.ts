@@ -4,7 +4,7 @@
 
 import { Document, Schema, model } from 'mongoose'
 
-interface URL extends Document {
+export interface URL extends Document {
   url: string
   slug: string
   createdDate: number

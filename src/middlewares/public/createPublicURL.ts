@@ -15,7 +15,7 @@ const { createURL } = await import(DB_CONTROLLER)
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(createURL('public', { url: req.body.url }))
+    res.json(await createURL('public', { url: req.body.url }))
   } catch (e: any) {
     next(e)
   }
