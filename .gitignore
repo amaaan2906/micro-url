@@ -12,6 +12,7 @@ dist/
 # npm
 .DS_Store
 node_modules/
+.nvmrc
 
 # Editor directories and files
 .idea
