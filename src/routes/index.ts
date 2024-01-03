@@ -4,6 +4,8 @@
 
 import { Router, Request, Response, ErrorRequestHandler } from 'express'
 
+import urlRedirect from '../middlewares/urlRedirect.js'
+
 if (process.env.NODE_ENV !== 'production') {
   const dotenv = await import('dotenv')
   dotenv.config()
@@ -15,6 +17,14 @@ const routes: Router = Router()
 routes.get('/health', (req: Request, res: Response) => {
   res.sendStatus(200)
 })
+
+// 404 route
+routes.get('/404', (req: Request, res: Response) => {
+  res.sendStatus(404)
+})
+
+// short url redirect
+routes.route('/:slug').get(urlRedirect)
 
 /**
  *  [ ] account system

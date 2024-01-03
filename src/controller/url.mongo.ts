@@ -1,40 +1,21 @@
 import '../config/db.mongo.js'
 import { urlModel, urlSchema, URL } from '../models/url.mongo.js'
 import { model } from 'mongoose'
-
 import rs from 'randomstring'
 
-interface createResponse {
-  slugChange?: boolean
-  url?: {
-    url: string
-    slug: string
-    clicks: number
-    createdBy: string
-    _id: string
-    createdDate: number
-    __v: number
-  }
-}
-interface statsResponse {
+interface stats_redirectResponse {
   url: string
   slug: string
   clicks: number
   createdDate: number
 }
-
-interface createOptions {
-  url: string
+interface stats_redirectOptions {
   slug: string
 }
-interface statsOptions {
-  slug: string
-}
-
 export async function getStats(
   type: string = 'public',
-  options: statsOptions
-): Promise<statsResponse> {
+  options: stats_redirectOptions
+): Promise<stats_redirectResponse> {
   let { slug } = options
   let response: any = {}
   if (typeof slug === 'undefined' || slug == '')
@@ -50,7 +31,7 @@ export async function getStats(
     // private search
   }
   if (exists) {
-    const response = JSON.parse(JSON.stringify(exists))
+    response = JSON.parse(JSON.stringify(exists))
     delete response._id
     delete response.__v
     delete response.createdBy
@@ -58,6 +39,22 @@ export async function getStats(
   } else throw new Error(`'/${slug}' is invalid`)
 }
 
+interface createResponse {
+  slugChange?: boolean
+  url?: {
+    url: string
+    slug: string
+    clicks: number
+    createdBy: string
+    _id: string
+    createdDate: number
+    __v: number
+  }
+}
+interface createOptions {
+  url: string
+  slug?: string
+}
 export async function createURL(
   type: string = 'public',
   options: createOptions
@@ -102,6 +99,29 @@ export async function createURL(
       createdBy: `<account id>`,
     })
     response.url = await newPrivate.save()
+  }
+  return response
+}
+
+export async function getRedirect(
+  options: stats_redirectOptions
+): Promise<stats_redirectResponse> {
+  let { slug } = options
+  let response: any = {}
+  if (typeof slug === 'undefined' || slug == '')
+    throw new Error('Slug query not present')
+  console.log(`[server] Retrieving redirect for '/${slug}'`)
+  const exists = await urlModel.findOne({
+    slug: slug,
+  })
+  if (exists) {
+    exists.clicks += 1
+    await exists.save()
+    response = JSON.parse(JSON.stringify(exists))
+    delete response._id
+    delete response.__v
+  } else {
+    response.url = '/404'
   }
   return response
 }

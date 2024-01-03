@@ -18,6 +18,6 @@ app.use('/', routes)
 
 // Run app
 const PORT: string | number = process.env.PORT || 2906
-app.listen(PORT, () => {
-  console.log('[server] Service is live on ' + PORT)
+const server: any = app.listen(PORT, () => {
+  console.log('[server] Service is live on ' + server.address().port)
 })
