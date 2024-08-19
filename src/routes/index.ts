@@ -4,12 +4,13 @@
 
 import { Router, Request, Response, ErrorRequestHandler } from 'express'
 
+import config from '../config/config.js'
 import urlRedirect from '../middlewares/urlRedirect.js'
 
-if (process.env.NODE_ENV !== 'production') {
-  const dotenv = await import('dotenv')
-  dotenv.config()
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   const dotenv = await import('dotenv')
+//   dotenv.config()
+// }
 
 const routes: Router = Router()
 
@@ -44,10 +45,9 @@ routes.use('/api/', publicAPI)
 
 // pro user private api
 import privateAPI from './private/index.js'
-console.log(
-  `[server] Private route registered on '${process.env.PRIVATE_ROUTE}'`
-)
-routes.use(`/${process.env.PRIVATE_ROUTE}/`, privateAPI)
+console.log(`[router] Private route registered on '${config.private_route}'`)
+
+routes.use(`/${config.private_route}/`, privateAPI)
 
 // error handling
 const errorHandler: ErrorRequestHandler = (error, req, res, next) => {

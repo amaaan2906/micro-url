@@ -1,10 +1,13 @@
 # Build folders
-dist/
+dist
+bin
 
 # Environemt files
-.env
+.env*
+
 .env.local
 .env.*.local
+!.env.schema
 
 # private data
 *.http

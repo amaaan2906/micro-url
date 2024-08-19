@@ -1,5 +1,5 @@
-import '../config/db.mongo.js'
 import { urlModel, urlSchema, URL } from '../models/url.mongo.js'
+
 import { model } from 'mongoose'
 import rs from 'randomstring'
 
@@ -12,6 +12,12 @@ interface stats_redirectResponse {
 interface stats_redirectOptions {
   slug: string
 }
+/**
+ *
+ * @param type
+ * @param options
+ * @returns
+ */
 export async function getStats(
   type: string = 'public',
   options: stats_redirectOptions
@@ -39,6 +45,34 @@ export async function getStats(
   } else throw new Error(`'/${slug}' is invalid`)
 }
 
+/**
+ *
+ * @param options
+ * @returns
+ */
+export async function getRedirect(
+  options: stats_redirectOptions
+): Promise<stats_redirectResponse> {
+  let { slug } = options
+  let response: any = {}
+  if (typeof slug === 'undefined' || slug == '')
+    throw new Error('Slug query not present')
+  console.log(`[server] Retrieving redirect for '/${slug}'`)
+  const exists = await urlModel.findOne({
+    slug: slug,
+  })
+  if (exists) {
+    exists.clicks += 1
+    await exists.save()
+    response = JSON.parse(JSON.stringify(exists))
+    delete response._id
+    delete response.__v
+  } else {
+    response.url = '/404'
+  }
+  return response
+}
+
 interface createResponse {
   slugChange?: boolean
   url?: {
@@ -55,6 +89,12 @@ interface createOptions {
   url: string
   slug?: string
 }
+/**
+ *
+ * @param type
+ * @param options
+ * @returns
+ */
 export async function createURL(
   type: string = 'public',
   options: createOptions
@@ -99,29 +139,6 @@ export async function createURL(
       createdBy: `<account id>`,
     })
     response.url = await newPrivate.save()
-  }
-  return response
-}
-
-export async function getRedirect(
-  options: stats_redirectOptions
-): Promise<stats_redirectResponse> {
-  let { slug } = options
-  let response: any = {}
-  if (typeof slug === 'undefined' || slug == '')
-    throw new Error('Slug query not present')
-  console.log(`[server] Retrieving redirect for '/${slug}'`)
-  const exists = await urlModel.findOne({
-    slug: slug,
-  })
-  if (exists) {
-    exists.clicks += 1
-    await exists.save()
-    response = JSON.parse(JSON.stringify(exists))
-    delete response._id
-    delete response.__v
-  } else {
-    response.url = '/404'
   }
   return response
 }

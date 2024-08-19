@@ -4,14 +4,10 @@
 
 import { Request, Response, NextFunction } from 'express'
 
-if (process.env.NODE_ENV !== 'production') {
-  const dotenv = await import('dotenv')
-  dotenv.config()
-}
+import config from '../config/config.js'
 
-const DATABASE = process.env.DATABASE_TYPE
-const DB_CONTROLLER = `../controller/url.${DATABASE}.js`
-const { createURL } = await import(DB_CONTROLLER)
+const DATABASE = config.database_type
+const { createURL } = await import(`../db/controller/url.${DATABASE}.js`)
 
 export async function publicCreate(
   req: Request,
