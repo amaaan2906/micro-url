@@ -6,8 +6,9 @@ import { Request, Response, NextFunction } from 'express'
 
 import config from '../config/config.js'
 
-const DATABASE = config.database_type
-const { getRedirect } = await import(`../db/controller/url.${DATABASE}.js`)
+const { getRedirect } = await import(
+  `../db/controller/url.${config.database_type}.js`
+)
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {

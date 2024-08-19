@@ -25,8 +25,9 @@ app.use('/', routes)
 // Run app
 const PORT: string | number = config.port || 1337
 
-const server: any = app.listen(PORT, () => {
+const server: any = app.listen(PORT, async () => {
   console.log('[app] Service is live on ' + server.address().port)
+  const db = await import(`./db/db.${config.database_type}.js`)
   if (process.env.APP_ENV != 'prod')
     console.log('[app]', process.env.APP_ENV, 'config', config)
 })
